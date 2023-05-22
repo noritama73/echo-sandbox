@@ -20,8 +20,8 @@ func NewApiHandler() *APIHander {
 }
 
 type AddInput struct {
-	num  []int  `query:"num" validate:"required,gt=1"`
-	hoge string `query:"hoge" validate:"required"`
+	Num  []int  `query:"num" validate:"required,gt=1"`
+	Hoge string `query:"hoge" validate:"required"`
 }
 
 func (i AddInput) Validate() error {
@@ -33,15 +33,13 @@ func (h *APIHander) Add(c echo.Context) error {
 	if err := c.Bind(&param); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
+	log.Println(param)
 	if err := param.Validate(); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	log.Println(param)
 	var sum int
-	for i := range param.num {
-		log.Println(i)
-		sum += i
+	for _, k := range param.Num {
+		sum += k
 	}
-	log.Println(c.QueryParam("hoge"))
 	return c.JSON(http.StatusOK, sum)
 }
